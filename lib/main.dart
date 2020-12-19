@@ -5,6 +5,7 @@ import 'package:camera_camera/camera_camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
+import 'package:workmanager/workmanager.dart';
 import 'widgets.dart';
 // import 'package:flutter/widget.dart';
 import 'package:camera_camera/page/camera.dart';
@@ -31,7 +32,6 @@ void main() async {
   // });
 
   // await vonage();
-  print('hello');
   runApp(MyApp());
 }
 
@@ -447,11 +447,28 @@ class MyCustomForm extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final appTitle = 'Revilion Poc';
   File val;
+
+  String _sharingState = 'Awaiting Sharing';
+
+  Future<void> _startSharing() async {
+    String sharingState;
+    try {
+      await platform.invokeMethod('StartSharing');
+      sharingState = 'Started Sharing';
+    } on PlatformException catch (e) {
+      sharingState = "Failed to start session: '${e.message}.";
+    }
+
+    setState(() {
+      _sharingState = sharingState;
+    });
+  }
+
+  static const platform = const MethodChannel('screenShare');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-
       appBar: AppBar(
         title: Text(appTitle),
       ),
@@ -477,6 +494,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Container(
         margin: new EdgeInsets.symmetric(horizontal: 40.0),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           // Column is also a layout widget. It takes a list of children and
           // arranges them vertically. By default, it sizes itself to fit its
           // children horizontally, and tries to be as tall as its parent.
@@ -496,7 +514,26 @@ class _MyHomePageState extends State<MyHomePage> {
             MyCustomForm(),
             Expanded(
               child: IosPlatform(),
-            )
+            ),
+            const SizedBox(height: 30),
+            RaisedButton(
+              onPressed: _startSharing,
+              textColor: Colors.white,
+              padding: const EdgeInsets.all(0.0),
+              child: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: <Color>[
+                      Color(0xFF0D47A1),
+                      Color(0xFF1976D2),
+                      Color(0xFF42A5F5),
+                    ],
+                  ),
+                ),
+                padding: const EdgeInsets.all(10.0),
+                child: Text(_sharingState, style: TextStyle(fontSize: 20)),
+              ),
+            ),
           ],
         ),
 

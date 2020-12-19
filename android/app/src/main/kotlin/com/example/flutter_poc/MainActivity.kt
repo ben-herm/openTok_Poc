@@ -2,12 +2,15 @@ package com.example.flutter_poc
 
 import io.flutter.embedding.android.FlutterActivity
 import android.Manifest
+import androidx.annotation.NonNull
 import android.content.*
 import android.hardware.Sensor
+import io.flutter.embedding.engine.FlutterEngine
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.media.projection.MediaProjectionManager
+import io.flutter.plugin.common.MethodChannel
 import android.opengl.GLSurfaceView
 import android.os.BatteryManager
 import android.os.Bundle
@@ -26,12 +29,27 @@ import java.nio.ByteBuffer
 import java.util.*
 
 class MainActivity: FlutterActivity(), Session.SessionListener, PublisherKit.PublisherListener, MediaProjectionHandler, SensorEventListener, TemperatureMonitorListener {
+
+    private val CHANNEL = "screenShare"
+    override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
+        super.configureFlutterEngine(flutterEngine)
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler {
+            call, result ->
+            if(call.method == "StartSharing") {
+                requestScreenCapture()
+            }
+            // Note: this method is invoked on the main thread.
+            // TODO
+        }
+    }
+
+
     companion object {
         const val TAG = "MainActivity"
 
         const val API_KEY = "47043564"
-        const val SESSION_ID = "2_MX40NzA0MzU2NH5-MTYwODE5MTcwMTYyOX5mWU9pdVlqbUNuQm5XbENreFVITWZjcjV-fg"
-        const val TOKEN = "T1==cGFydG5lcl9pZD00NzA0MzU2NCZzaWc9ZmZmMzQyNzg4ZDM5NGZiZjMxNWQxMDZhZTZhYzIxMDg1NGQ3N2FhMDpzZXNzaW9uX2lkPTJfTVg0ME56QTBNelUyTkg1LU1UWXdPREU1TVRjd01UWXlPWDVtV1U5cGRWbHFiVU51UW01WGJFTnJlRlZJVFdaamNqVi1mZyZjcmVhdGVfdGltZT0xNjA4MjE3MjEwJm5vbmNlPTAuNDkyNTkyNjEzMTAzOTU1NzUmcm9sZT1wdWJsaXNoZXImZXhwaXJlX3RpbWU9MTYwODMwMzYxNSZpbml0aWFsX2xheW91dF9jbGFzc19saXN0PQ=="
+        const val SESSION_ID = "2_MX40NzA0MzU2NH5-MTYwODM4NTU1ODYxMn5LTkJVc0p0bjZibXd6dVpxekllSWR2d1F-fg"
+        const val TOKEN = "T1==cGFydG5lcl9pZD00NzA0MzU2NCZzaWc9YmJmOWViNDFjODk4MmI5NzY1ZDY2NWRkZWUzM2ZhN2IwYzAzZTIwMDpzZXNzaW9uX2lkPTJfTVg0ME56QTBNelUyTkg1LU1UWXdPRE00TlRVMU9EWXhNbjVMVGtKVmMwcDBialppYlhkNmRWcHhla2xsU1dSMmQxRi1mZyZjcmVhdGVfdGltZT0xNjA4Mzg3NjcwJm5vbmNlPTAuMDk4NDk2NTU3ODU3MjE1NDUmcm9sZT1wdWJsaXNoZXImZXhwaXJlX3RpbWU9MTYxMDk3OTY3MiZpbml0aWFsX2xheW91dF9jbGFzc19saXN0PQ=="
 
         const val RC_VIDEO_APP_PERM = 124
         const val RC_SCREEN_CAPTURE = 125
@@ -50,6 +68,7 @@ class MainActivity: FlutterActivity(), Session.SessionListener, PublisherKit.Pub
 
     private var temperatureMonitor: TemperatureMonitor? = null
     private var customVideoCapturer: CustomVideoCapturer? = null
+    private var mFrameLayout: FrameLayout? = null
 
     private var publisherMain: Publisher? = null
     private var publisherScreen: Publisher? = null
@@ -79,7 +98,9 @@ class MainActivity: FlutterActivity(), Session.SessionListener, PublisherKit.Pub
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_main)
-
+        mFrameLayout = FrameLayout(this)
+        val layoutParams = ViewGroup.LayoutParams(300, 300)
+        addContentView(mFrameLayout, layoutParams)
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         ambientTemperatureSensor = sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE)
         if (ambientTemperatureSensor == null) {
@@ -173,7 +194,6 @@ class MainActivity: FlutterActivity(), Session.SessionListener, PublisherKit.Pub
 //            shareScreenButton = findViewById(R.id.sharescreen_button)
 //            disconnectButton = findViewById(R.id.disconnect_button)
             Log.d(TAG, "Initiate Screenshare")
-            requestScreenCapture()
             // Setup callback for Screenshare Button
 //            shareScreenButton.setOnClickListener {
 //                if (publisherScreen == null) {
@@ -324,6 +344,7 @@ class MainActivity: FlutterActivity(), Session.SessionListener, PublisherKit.Pub
         val frameLayout = FrameLayout(this)
         frameLayout.layoutParams = ViewGroup.LayoutParams(p1?.videoWidth ?: 240, p1?.videoHeight ?: 320)
         frameLayout.addView(subscriberView)
+        mFrameLayout!!.addView(subscriberView)
         subscriberViewContainer.addView(frameLayout)
     }
 
