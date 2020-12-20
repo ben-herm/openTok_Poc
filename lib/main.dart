@@ -512,9 +512,9 @@ class _MyHomePageState extends State<MyHomePage> {
           // mainAxisAlignment: MainAxisAlignment.center
           children: <Widget>[
             MyCustomForm(),
-            Expanded(
-              child: IosPlatform(),
-            ),
+            // Expanded(
+            //   child: IosPlatform(),
+            // ),
             const SizedBox(height: 30),
             RaisedButton(
               onPressed: _startSharing,
