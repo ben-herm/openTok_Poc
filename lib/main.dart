@@ -9,6 +9,7 @@ import 'package:workmanager/workmanager.dart';
 import 'widgets.dart';
 // import 'package:flutter/widget.dart';
 import 'package:camera_camera/page/camera.dart';
+import 'package:flutter_foreground_plugin/flutter_foreground_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:vonage/verify.dart';
@@ -24,15 +25,29 @@ Future<void> vonage() async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // var auth = VerifyVonage("apiKey", "apiSecret", "phoneNumber", "brandName", 4);
-  // auth.then((res) {
-  //   print(res); //response from vonage in json format;
-  // }).catchError((err) {
-  //   print(err); // In case pf error
-  // });
-
-  // await vonage();
+  startForegroundService();
   runApp(MyApp());
+}
+
+void startForegroundService() async {
+  await FlutterForegroundPlugin.setServiceMethodInterval(seconds: 5);
+  await FlutterForegroundPlugin.setServiceMethod(globalForegroundService);
+  await FlutterForegroundPlugin.startForegroundService(
+    holdWakeLock: false,
+    onStarted: () {
+      print("Foreground on Started");
+    },
+    onStopped: () {
+      print("Foreground on Stopped");
+    },
+    title: "Flutter Foreground Service",
+    content: "This is Content",
+    iconName: "ic_stat_hot_tub",
+  );
+}
+
+void globalForegroundService() {
+  debugPrint("current datetime is ${DateTime.now()}");
 }
 
 class MyApp extends StatelessWidget {

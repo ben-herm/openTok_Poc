@@ -17,6 +17,7 @@ import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
 import android.view.ViewGroup
+import android.view.ViewManager
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.LinearLayout
@@ -48,8 +49,8 @@ class MainActivity: FlutterActivity(), Session.SessionListener, PublisherKit.Pub
         const val TAG = "MainActivity"
 
         const val API_KEY = "47043564"
-        const val SESSION_ID = "2_MX40NzA0MzU2NH5-MTYwODM4NTU1ODYxMn5LTkJVc0p0bjZibXd6dVpxekllSWR2d1F-fg"
-        const val TOKEN = "T1==cGFydG5lcl9pZD00NzA0MzU2NCZzaWc9YmJmOWViNDFjODk4MmI5NzY1ZDY2NWRkZWUzM2ZhN2IwYzAzZTIwMDpzZXNzaW9uX2lkPTJfTVg0ME56QTBNelUyTkg1LU1UWXdPRE00TlRVMU9EWXhNbjVMVGtKVmMwcDBialppYlhkNmRWcHhla2xsU1dSMmQxRi1mZyZjcmVhdGVfdGltZT0xNjA4Mzg3NjcwJm5vbmNlPTAuMDk4NDk2NTU3ODU3MjE1NDUmcm9sZT1wdWJsaXNoZXImZXhwaXJlX3RpbWU9MTYxMDk3OTY3MiZpbml0aWFsX2xheW91dF9jbGFzc19saXN0PQ=="
+        const val SESSION_ID = "1_MX40NzA0MzU2NH5-MTYwODQ2NDM0MjU4M35MYVVnZ3NEOUxtQ1oyVkEyWm5uZkFiQ3F-fg"
+        const val TOKEN = "T1==cGFydG5lcl9pZD00NzA0MzU2NCZzaWc9ZDEwOWRlYjg0ZTM3NTU1YmNlYzdjNjc4ZGUwY2NhNzkwZTg5MjdhZDpzZXNzaW9uX2lkPTFfTVg0ME56QTBNelUyTkg1LU1UWXdPRFEyTkRNME1qVTRNMzVNWVZWblozTkVPVXh0UTFveVZrRXlXbTV1WmtGaVEzRi1mZyZjcmVhdGVfdGltZT0xNjA4NDY0NTQyJm5vbmNlPTAuODkzODUwODA0NzMwOTI2MiZyb2xlPXB1Ymxpc2hlciZleHBpcmVfdGltZT0xNjA5MDY5MzQxJmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9"
 
         const val RC_VIDEO_APP_PERM = 124
         const val RC_SCREEN_CAPTURE = 125
@@ -98,9 +99,6 @@ class MainActivity: FlutterActivity(), Session.SessionListener, PublisherKit.Pub
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_main)
-        mFrameLayout = FrameLayout(this)
-        val layoutParams = ViewGroup.LayoutParams(300, 300)
-        addContentView(mFrameLayout, layoutParams)
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         ambientTemperatureSensor = sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE)
         if (ambientTemperatureSensor == null) {
@@ -119,7 +117,9 @@ class MainActivity: FlutterActivity(), Session.SessionListener, PublisherKit.Pub
         Log.d(TAG, "Starting Temperature Monitor")
         temperatureMonitor = TemperatureMonitor(this)
         temperatureMonitor?.start(30, this)
-
+        session = Session.Builder(this, API_KEY, SESSION_ID).build()
+        session.setSessionListener(this)
+        session.connect(TOKEN)
         requestPermissions()
     }
 
@@ -216,9 +216,7 @@ class MainActivity: FlutterActivity(), Session.SessionListener, PublisherKit.Pub
 //            }
 
             // Create and Connect to Session
-            session = Session.Builder(this, API_KEY, SESSION_ID).build()
-            session.setSessionListener(this)
-            session.connect(TOKEN)
+
         } else {
             EasyPermissions.requestPermissions(
                     this,
@@ -302,7 +300,10 @@ class MainActivity: FlutterActivity(), Session.SessionListener, PublisherKit.Pub
         // When a stream is dropped from session, remove all stream views
         // TODO Note: You should keep track of all stream view and remove only the dropped stream view
         Log.d(TAG, "Stream Dropped")
-        subscriberViewContainer.removeAllViews()
+
+//        mFrameLayout.parent.
+
+//        subscriberViewContainer.removeAllViews().rem
     }
 
     override fun onStreamReceived(p0: Session?, p1: Stream?) {
@@ -341,11 +342,15 @@ class MainActivity: FlutterActivity(), Session.SessionListener, PublisherKit.Pub
         val subscriberView = subscriber!!.view
 
         // Add stream view to screen
-        val frameLayout = FrameLayout(this)
-        frameLayout.layoutParams = ViewGroup.LayoutParams(p1?.videoWidth ?: 240, p1?.videoHeight ?: 320)
-        frameLayout.addView(subscriberView)
-        mFrameLayout!!.addView(subscriberView)
-        subscriberViewContainer.addView(frameLayout)
+        val mFrameLayout = FrameLayout(this)
+        val layoutParams = ViewGroup.LayoutParams(300, 300)
+        mFrameLayout.addView(subscriberView)
+        addContentView(mFrameLayout, layoutParams)
+//        val frameLayout = FrameLayout(this)
+//        frameLayout.layoutParams = ViewGroup.LayoutParams(p1?.videoWidth ?: 240, p1?.videoHeight ?: 320)
+//        frameLayout.addView(subscriberView)
+
+//        subscriberViewContainer.addView(frameLayout)
     }
 
     override fun onConnected(p0: Session?) {
