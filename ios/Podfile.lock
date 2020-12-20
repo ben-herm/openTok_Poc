@@ -8,6 +8,8 @@ PODS:
   - flutter_blue/Protos (0.0.1):
     - Flutter
     - Protobuf (~> 3.11.4)
+  - flutter_foreground_plugin (0.0.1):
+    - Flutter
   - native_device_orientation (0.0.1):
     - Flutter
   - OpenTok (2.18.0)
@@ -23,6 +25,7 @@ DEPENDENCIES:
   - camera (from `.symlinks/plugins/camera/ios`)
   - Flutter (from `Flutter`)
   - flutter_blue (from `.symlinks/plugins/flutter_blue/ios`)
+  - flutter_foreground_plugin (from `.symlinks/plugins/flutter_foreground_plugin/ios`)
   - native_device_orientation (from `.symlinks/plugins/native_device_orientation/ios`)
   - OpenTok
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
@@ -41,6 +44,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_blue:
     :path: ".symlinks/plugins/flutter_blue/ios"
+  flutter_foreground_plugin:
+    :path: ".symlinks/plugins/flutter_foreground_plugin/ios"
   native_device_orientation:
     :path: ".symlinks/plugins/native_device_orientation/ios"
   path_provider:
@@ -54,6 +59,7 @@ SPEC CHECKSUMS:
   camera: a0ca5080336f7af47b88436e5e26da3dee5568f0
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_blue: eeb381dc4727a0954dede73515f683865494b370
+  flutter_foreground_plugin: 685583f00ade6168e38f08fd11d6cc0402ebb975
   native_device_orientation: e24d00be281de72996640885d80e706142707660
   OpenTok: bf4c81ff741e7976542c61b8f317882f8076eede
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
