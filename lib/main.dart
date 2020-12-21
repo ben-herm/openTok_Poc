@@ -3,51 +3,73 @@ import 'dart:math';
 import 'dart:async';
 import 'package:camera_camera/camera_camera.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/rendering.dart';
 import 'package:workmanager/workmanager.dart';
 import 'widgets.dart';
+import 'package:flutter/material.dart';
 // import 'package:flutter/widget.dart';
 import 'package:camera_camera/page/camera.dart';
-import 'package:flutter_foreground_plugin/flutter_foreground_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:vonage/verify.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'dart:convert';
-import 'package:vonage/vonage.dart';
-
-Future<void> vonage() async {
-  var auth = VerifyVonage(
-      "043f9d65", "dMjl3Fft4CzTwoAk", "+972508676743", "brandName", 4);
-  print(auth);
-}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  startForegroundService();
+  Workmanager.initialize(
+    callbackDispatcher,
+    isInDebugMode: true,
+  );
+
   runApp(MyApp());
 }
 
-void startForegroundService() async {
-  await FlutterForegroundPlugin.setServiceMethodInterval(seconds: 5);
-  await FlutterForegroundPlugin.setServiceMethod(globalForegroundService);
-  await FlutterForegroundPlugin.startForegroundService(
-    holdWakeLock: false,
-    onStarted: () {
-      print("Foreground on Started");
-    },
-    onStopped: () {
-      print("Foreground on Stopped");
-    },
-    title: "Flutter Foreground Service",
-    content: "This is Content",
-    iconName: "ic_stat_hot_tub",
-  );
-}
+const simpleTaskKey = "simpleTask";
+const simplePeriodicTask = "simplePeriodicTask";
+enum _Platform { android, ios }
 
-void globalForegroundService() {
-  debugPrint("current datetime is ${DateTime.now()}");
+void callbackDispatcher() {
+  // Future<void> createOrderMessage() async {
+  //   Future<dynamic> fetchUserOrder() =>
+  //       FlutterBlue.instance.startScan(timeout: Duration(seconds: 4));
+  //   // Imagine that this function is
+  //   // more complex and slow.
+
+  //   var order = await fetchUserOrder();
+  //   if (order) {
+  //     FlutterBlue.instance.scanResults.listen((results) {
+  //       // do something with scan results
+  //       for (ScanResult r in results) {
+  //         print('${r.device.name} found! rssi: ${r.rssi}');
+  //       }
+  //     });
+  //   }
+  // }
+  Workmanager.executeTask((task, inputData) async {
+    switch (task) {
+      case simpleTaskKey:
+        print("$simpleTaskKey was executed. inputData = $inputData");
+        final prefs = await SharedPreferences.getInstance();
+        prefs.setBool("test", true);
+        print("Bool from prefs: ${prefs.getBool("test")}");
+        break;
+      case simplePeriodicTask:
+        print("$simplePeriodicTask was executed");
+        break;
+      case Workmanager.iOSBackgroundTask:
+        print("The iOS background fetch was triggered");
+        Directory tempDir = await getTemporaryDirectory();
+        String tempPath = tempDir.path;
+        print(
+            "You can access other plugins in the background, for example Directory.getTemporaryDirectory(): $tempPath");
+        break;
+    }
+
+    return Future.value(true);
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -459,6 +481,22 @@ class MyCustomForm extends StatefulWidget {
   }
 }
 
+class PlatformEnabledButton extends RaisedButton {
+  final _Platform platform;
+
+  PlatformEnabledButton({
+    this.platform,
+    @required Widget child,
+    @required VoidCallback onPressed,
+  })  : assert(child != null, onPressed != null),
+        super(
+            child: child,
+            onPressed: (Platform.isAndroid && platform == _Platform.android ||
+                    Platform.isIOS && platform == _Platform.ios)
+                ? onPressed
+                : null);
+}
+
 class _MyHomePageState extends State<MyHomePage> {
   final appTitle = 'Revilion Poc';
   File val;
@@ -549,6 +587,23 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Text(_sharingState, style: TextStyle(fontSize: 20)),
               ),
             ),
+            PlatformEnabledButton(
+                platform: _Platform.android,
+                child: Text("Register Periodic Task"),
+                onPressed: () {
+                  Workmanager.registerPeriodicTask(
+                    "3",
+                    simplePeriodicTask,
+                    initialDelay: Duration(seconds: 3),
+                    frequency: Duration(minutes: 1),
+                  );
+                }),
+            PlatformEnabledButton(
+                platform: _Platform.android,
+                child: Text("cancel Tasks"),
+                onPressed: () {
+                  Workmanager.cancelAll();
+                }),
           ],
         ),
 
