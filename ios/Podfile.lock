@@ -12,7 +12,7 @@ PODS:
     - Flutter
   - native_device_orientation (0.0.1):
     - Flutter
-  - OpenTok (2.18.0)
+  - OpenTok (2.18.1)
   - path_provider (0.0.1):
     - Flutter
   - Protobuf (3.11.4)
@@ -29,7 +29,7 @@ DEPENDENCIES:
   - flutter_blue (from `.symlinks/plugins/flutter_blue/ios`)
   - flutter_foreground_plugin (from `.symlinks/plugins/flutter_foreground_plugin/ios`)
   - native_device_orientation (from `.symlinks/plugins/native_device_orientation/ios`)
-  - OpenTok
+  - OpenTok (= 2.18.1)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - video_player (from `.symlinks/plugins/video_player/ios`)
@@ -66,13 +66,13 @@ SPEC CHECKSUMS:
   flutter_blue: eeb381dc4727a0954dede73515f683865494b370
   flutter_foreground_plugin: 685583f00ade6168e38f08fd11d6cc0402ebb975
   native_device_orientation: e24d00be281de72996640885d80e706142707660
-  OpenTok: bf4c81ff741e7976542c61b8f317882f8076eede
+  OpenTok: 2a816f5d77fbf2e2ebb5aec841bd21fb7dc7737b
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   Protobuf: 176220c526ad8bd09ab1fb40a978eac3fef665f7
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   video_player: 9cc823b1d9da7e8427ee591e8438bfbcde500e6e
   wakelock: 0d4a70faf8950410735e3f61fb15d517c8a6efc4
 
-PODFILE CHECKSUM: c42cc0a12422be18acab0817d3a5f5669bd736eb
+PODFILE CHECKSUM: 15864abce4a88b8ce65e170439a3cd3fe94e2147
 
 COCOAPODS: 1.9.1
