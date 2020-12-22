@@ -572,7 +572,7 @@ class _MyHomePageState extends State<MyHomePage> {
             RaisedButton(
               onPressed: _startSharing,
               textColor: Colors.white,
-              padding: const EdgeInsets.all(0.0),
+              padding: const EdgeInsets.all(10.0),
               child: Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(

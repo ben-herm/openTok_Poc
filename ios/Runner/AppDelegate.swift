@@ -49,7 +49,7 @@ import OpenTok
 
 
     GeneratedPluginRegistrant.register(with: self)
-    weak var registrar = self.registrar(forPlugin: "plugin-name")
+//    weak var registrar = self.registrar(forPlugin: "plugin-name")
 
 //           let factory = FLNativeViewFactory(messenger: registrar!.messenger())
 //           self.registrar(forPlugin: "<plugin-name>")!.register(
@@ -60,9 +60,9 @@ import OpenTok
     
     var kApiKey = "47043564"
     // Replace with your generated session ID
-    var kSessionId = "1_MX40NzA0MzU2NH5-MTYwODQ2NDM0MjU4M35MYVVnZ3NEOUxtQ1oyVkEyWm5uZkFiQ3F-fg"
+    var kSessionId = "2_MX40NzA0MzU2NH5-MTYwODYyMTUyOTk0NH5oM1h2THh1a2FsVVFueVZUSzhUNk9JZ1F-fg"
     // Replace with your generated token
-    var kToken = "T1==cGFydG5lcl9pZD00NzA0MzU2NCZzaWc9NzU1MTliOTA4YWM3NzFkNDRiM2Y4NTYwNzgwOWE1MDM4MDVlNjJhZDpzZXNzaW9uX2lkPTFfTVg0ME56QTBNelUyTkg1LU1UWXdPRFEyTkRNME1qVTRNMzVNWVZWblozTkVPVXh0UTFveVZrRXlXbTV1WmtGaVEzRi1mZyZjcmVhdGVfdGltZT0xNjA4NDY0MzYyJm5vbmNlPTAuNjgzNzA3MTUyMTAzNDIxJnJvbGU9cHVibGlzaGVyJmV4cGlyZV90aW1lPTE2MDkwNjkxNjEmaW5pdGlhbF9sYXlvdXRfY2xhc3NfbGlzdD0="
+    var kToken = "T1==cGFydG5lcl9pZD00NzA0MzU2NCZzaWc9NTllM2Q0YWViYzUyZjkyZTJmMDliZjgzZWZiMjc5NGJmZjIzOGMwMjpzZXNzaW9uX2lkPTJfTVg0ME56QTBNelUyTkg1LU1UWXdPRFl5TVRVeU9UazBOSDVvTTFoMlRIaDFhMkZzVlZGdWVWWlVTemhVTms5SloxRi1mZyZjcmVhdGVfdGltZT0xNjA4NjIxOTAwJm5vbmNlPTAuNjE1MjM3NzE2MDQwNDg3MiZyb2xlPXB1Ymxpc2hlciZleHBpcmVfdGltZT0xNjA5MjI2Njk4JmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9"
      lazy var session: OTSession = {
           return OTSession(apiKey: kApiKey, sessionId: kSessionId, delegate: self)!
       }()
