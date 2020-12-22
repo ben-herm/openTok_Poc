@@ -33,7 +33,7 @@ class _MyWelcomePageState extends State<MyWelcomePage> {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
         Padding(
-          padding: EdgeInsets.all(30),
+          padding: EdgeInsets.all(20),
         ),
         Icon(
           Icons.check_circle_outline_sharp,
@@ -155,17 +155,24 @@ class _MyWelcomePageState extends State<MyWelcomePage> {
       subTitleStyle = TextStyles.title.copyWith(fontSize: 18);
     }
     return Scaffold(
-        backgroundColor: Colors.white,
-        body: Stack(
-          children: <Widget>[
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                _welcomeTo(titleStyle, subTitleStyle),
-                _checkList()
-              ],
-            )
-          ],
-        ));
+      backgroundColor: Colors.white,
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [_welcomeTo(titleStyle, subTitleStyle), _checkList()],
+            ),
+          ),
+        ],
+      ),
+    );
   }
+
+  // Column(
+  //   crossAxisAlignment: CrossAxisAlignment.center,
+  //   children: <Widget>[
+  //     _welcomeTo(titleStyle, subTitleStyle),
+  //     _checkList()
+  //   ],
+  // )
 }

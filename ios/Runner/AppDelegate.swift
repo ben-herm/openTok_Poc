@@ -60,9 +60,9 @@ import OpenTok
     
     var kApiKey = "47043564"
     // Replace with your generated session ID
-    var kSessionId = "1_MX40NzA0MzU2NH5-MTYwODYyMzM5MTM3OH43citBaStOYktaMXl0ZnVpeWx6bHVVeTJ-fg"
+    var kSessionId = "1_MX40NzA0MzU2NH5-MTYwODY0ODc2MjM5OH43dUpMblQvSTFaTGc1K3NxM2VRd3FmRXl-fg"
     // Replace with your generated token
-    var kToken = "T1==cGFydG5lcl9pZD00NzA0MzU2NCZzaWc9N2U1ZGVhOTQwODI1NjY4YTM3OTkxYzljMTkxZjQxNzcyMWE4YWNhNjpzZXNzaW9uX2lkPTFfTVg0ME56QTBNelUyTkg1LU1UWXdPRFl5TXpNNU1UTTNPSDQzY2l0QmFTdE9Za3RhTVhsMFpuVnBlV3g2YkhWVmVUSi1mZyZjcmVhdGVfdGltZT0xNjA4NjI4OTMwJm5vbmNlPTAuNzY0NTkxNjQ3NDc5Njk2MSZyb2xlPXB1Ymxpc2hlciZleHBpcmVfdGltZT0xNjA5MjMzNzI5JmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9"
+    var kToken = "T1==cGFydG5lcl9pZD00NzA0MzU2NCZzaWc9M2E4ZjRiYjU5MWIzOWU5MzY1NTgwYjExNWU1NjczZTJjYjlmZWE2MTpzZXNzaW9uX2lkPTFfTVg0ME56QTBNelUyTkg1LU1UWXdPRFkwT0RjMk1qTTVPSDQzZFVwTWJsUXZTVEZhVEdjMUszTnhNMlZSZDNGbVJYbC1mZyZjcmVhdGVfdGltZT0xNjA4NjQ4Nzc4Jm5vbmNlPTAuNzEzNTM0NDQ3MzE0ODM3MSZyb2xlPXB1Ymxpc2hlciZleHBpcmVfdGltZT0xNjExMjQwNzc3JmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9"
      lazy var session: OTSession = {
           return OTSession(apiKey: kApiKey, sessionId: kSessionId, delegate: self)!
       }()
