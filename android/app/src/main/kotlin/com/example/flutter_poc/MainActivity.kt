@@ -1,47 +1,79 @@
 package com.example.flutter_poc
 
-import io.flutter.embedding.android.FlutterActivity
 import android.Manifest
-import androidx.annotation.NonNull
 import android.content.*
 import android.hardware.Sensor
-import io.flutter.embedding.engine.FlutterEngine
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.media.projection.MediaProjectionManager
-import io.flutter.plugin.common.MethodChannel
-import android.opengl.GLSurfaceView
-import android.os.BatteryManager
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
 import android.view.ViewGroup
-import android.view.ViewManager
 import android.widget.Button
+import android.media.RingtoneManager;
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
+import androidx.annotation.NonNull
 import com.opentok.android.*
+import io.flutter.embedding.android.FlutterActivity
+import com.umair.beacons_plugin.BeaconsPlugin
+import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.plugin.common.MethodCall
+import io.flutter.plugin.common.MethodChannel
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
 import java.nio.ByteBuffer
 import java.util.*
 
-class MainActivity: FlutterActivity(), Session.SessionListener, PublisherKit.PublisherListener, MediaProjectionHandler, SensorEventListener, TemperatureMonitorListener {
 
+class MainActivity: FlutterActivity(), Session.SessionListener, PublisherKit.PublisherListener, MediaProjectionHandler, SensorEventListener, TemperatureMonitorListener {
     private val CHANNEL = "screenShare"
+
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
-        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler {
-            call, result ->
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler { call, result ->
             if(call.method == "StartSharing") {
                 requestScreenCapture()
             }
             // Note: this method is invoked on the main thread.
             // TODO
         }
+        MethodChannel(flutterEngine.dartExecutor, "dexterx.dev/flutter_local_notifications_example").setMethodCallHandler { call: MethodCall, result: MethodChannel.Result ->
+            if ("drawableToUri" == call.method) {
+                val resourceId = this@MainActivity.resources.getIdentifier(call.arguments as String, "drawable", this@MainActivity.packageName)
+                result.success(resourceToUriString(this@MainActivity.applicationContext, resourceId))
+            }
+            if ("getAlarmUri" == call.method) {
+                result.success(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM).toString())
+            }
+            if ("getTimeZoneName" == call.method) {
+                result.success(TimeZone.getDefault().id)
+            }
+        }
+    }
+    override fun onPause() {
+        super.onPause()
+        //Start Background service to scan BLE devices
+        BeaconsPlugin.startBackgroundService(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        //Stop Background service, app is in foreground
+        BeaconsPlugin.stopBackgroundService(this)
+    }
+
+
+    private fun resourceToUriString(context: Context, resId: Int): String? {
+        return (ContentResolver.SCHEME_ANDROID_RESOURCE + "://"
+                + context.resources.getResourcePackageName(resId)
+                + "/"
+                + context.resources.getResourceTypeName(resId)
+                + "/"
+                + context.resources.getResourceEntryName(resId))
     }
 
 
@@ -312,7 +344,7 @@ class MainActivity: FlutterActivity(), Session.SessionListener, PublisherKit.Pub
         // Subscribe to new stream
         val subscriber = Subscriber.Builder(this, p1)
                 .build()
-        subscriber.setVideoListener(object: SubscriberKit.VideoListener {
+        subscriber.setVideoListener(object : SubscriberKit.VideoListener {
             override fun onVideoDataReceived(p0: SubscriberKit?) {
                 Log.d(TAG, "onVideoDataReceived Received ${subscriber.stream.streamId}")
             }

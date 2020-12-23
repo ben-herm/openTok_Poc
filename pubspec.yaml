@@ -29,9 +29,15 @@ dependencies:
   flutter_blue: ^0.7.3
   camera_camera:
   vonage: ^0.0.3
+  device_info: ^1.0.0
+  beacons_plugin: ^1.0.19
+  http: ^0.12.2
+  flutter_startup: ^0.0.2
+  flutter_isolate: ^1.0.0+14
   shared_preferences: ^0.5.12+4
   workmanager: ^0.2.0
   flutter_foreground_plugin: ^0.4.0
+  flutter_local_notifications: ^3.0.1+4
   transparent_image: ^1.0.0
   video_player: ">=0.10.9+2 <2.0.0"
   path_provider:

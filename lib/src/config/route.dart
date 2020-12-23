@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 // import 'package:flutter_healthcare_app/src/pages/detail_page.dart';
 import '../pages/home_page.dart';
+import '../pages/flutter_notification.dart';
 import '../pages/welcome_page.dart';
 import '../pages/splash_page.dart';
 import '../widgets/custom_route.dart';
 import '../../main.dart';
-
 
 class Routes {
   static Map<String, WidgetBuilder> getRoute() {
@@ -13,6 +13,7 @@ class Routes {
       '/': (_) => SplashPage(),
       '/HomePage': (_) => MyHomePage(),
       '/WelcomePage': (_) => MyWelcomePage(),
+      // '/NotificationPage': (_) => NotificationPage(),
     };
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../pages/home_page.dart';
+import '../pages/flutter_notification.dart';
 import '../pages/welcome_page.dart';
 import '../theme/light_color.dart';
 import '../theme/text_styles.dart';
@@ -15,24 +16,26 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
-     Future.delayed(Duration(seconds: 2)).then((_) {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => MyWelcomePage()));
+    Future.delayed(Duration(seconds: 2)).then((_) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (_) => MyHomePage()));
     });
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: <Widget>[
           Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/doctor_face.jpg"),
-                fit: BoxFit.fill,
+              // decoration: BoxDecoration(
+              //   image: DecorationImage(
+              //     image: AssetImage("assets/doctor_face.jpg"),
+              //     fit: BoxFit.fill,
+              //   ),
+              // ),
               ),
-            ),
-          ),
           Positioned.fill(
             child: Opacity(
               opacity: .6,
@@ -48,29 +51,33 @@ class _SplashPageState extends State<SplashPage> {
               ),
             ),
           ),
-         Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
-                  flex: 2,
-                  child: SizedBox(),
-                ),
-                Image.asset("assets/heartbeat.png", color: Colors.white,height: 100,),
-                Text(
-                  "Revilion",
-                  style: TextStyles.h1Style.white,
-                ),
-                Text(
-                  "Welcome to the future",
-                  style: TextStyles.bodySm.white.bold,
-                ),
-                Expanded(
-                  flex: 7,
-                  child: SizedBox(),
-                ),
-              ],
-            ).alignTopCenter,
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Expanded(
+                flex: 2,
+                child: SizedBox(),
+              ),
+              // Image.asset(
+              //   "assets/heartbeat.png",
+              //   color: Colors.white,
+              //   height: 100,
+              // ),
+              Text(
+                "Revilion",
+                style: TextStyles.h1Style.white,
+              ),
+              Text(
+                "Welcome to the future",
+                style: TextStyles.bodySm.white.bold,
+              ),
+              Expanded(
+                flex: 7,
+                child: SizedBox(),
+              ),
+            ],
+          ).alignTopCenter,
         ],
       ),
     );
